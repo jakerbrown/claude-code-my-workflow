@@ -107,3 +107,23 @@ Prefer:
 - small, composable Codex-native artifacts
 - explicit subagent spawning
 - durable files on disk for state
+
+## Integration guidance for existing repos
+
+When porting this starter pack into an existing repo, use this quick matrix:
+
+| Category | Default action | Examples |
+|---|---|---|
+| Operational control plane | Port directly | `.codex/config.toml`, hooks, rules |
+| Reusable workflow machinery | Port directly when relevant | skills, reviewer role files |
+| Durable-state locations | Adapt to host repo | `memos/`, `docs/session_logs/`, `docs/audits/` |
+| Planning/report templates | Adapt to host repo | plan, session-log, quality-report templates |
+| Review governance | Adapt to host repo | specialist mapping, adversarial-review triggers |
+| Slide / lecture tooling | Skip unless relevant | Quarto parity, TikZ, LaTeX, slide reviewers |
+
+For most mature repos, the right path is:
+
+1. preserve the host repo's planning and domain-doc authority
+2. port Milestone A first
+3. add Milestone B once the repo needs more structure
+4. add Milestone C only when reviewer roles and audit surfaces prove useful

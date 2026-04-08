@@ -3,6 +3,10 @@
 Use this kit when you want the same default Codex workflow across many repos
 without forcing each repo to adopt a full starter pack.
 
+This kit is best for the **first overlay pass** on an existing repo. If the repo
+later needs repo-local `.codex/`, skills, nested `AGENTS.md`, reviewer roles,
+or a review/audit surface, graduate it to the broader integration overlay.
+
 ## The six fields
 
 Customize only these per repo:
@@ -138,6 +142,14 @@ If missing, add these lightweight files:
 
 You do not need more than that to start.
 
+Typical host-native durable-state surfaces include:
+
+- `memos/`
+- `memos/session_logs/`
+- `docs/plans/`
+- `docs/session_logs/`
+- `docs/audits/`
+
 ## Good defaults
 
 If you want standard semantics across repos, reuse:
@@ -154,3 +166,5 @@ If you want standard semantics across repos, reuse:
 - Requiring adversarial review on routine changes that only need mapped
   specialist review plus verification.
 - Making the overlay so detailed that it competes with the repo's own docs.
+- Documenting starter-pack features in the repo README before those features
+  actually exist on disk.

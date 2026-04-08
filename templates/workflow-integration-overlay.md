@@ -8,6 +8,9 @@ methods on top without replacing what already works.
 
 Treat this workflow as an **overlay**, not a rewrite.
 
+For serious existing projects, this starter pack should usually be integrated in
+phases rather than copied wholesale on day one.
+
 Preserve:
 
 - existing specialized agents
@@ -37,6 +40,68 @@ If missing, add only these first:
 
 You do not need to force the repo into `quality_reports/` if it already has a
 good durable location for plans and logs.
+
+Common good host-native alternatives include:
+
+- `memos/`
+- `memos/session_logs/`
+- `memos/reviews/`
+- `docs/plans/`
+- `docs/session_logs/`
+- `docs/audits/`
+
+## Default adoption model
+
+For an existing repo, prefer this phased integration sequence:
+
+### Milestone A: operational foundation
+
+- add repo-local `.codex/` config, hooks, and rules
+- add a small repo-local skill library for repeated workflows
+- formalize default multi-agent review mappings
+- add a scoped adversarial-review rule for high-stakes changes
+
+### Milestone B: structure and consistency
+
+- add nested `AGENTS.md` files for the highest-risk paths
+- add a repo-specific workflow guide
+- add lightweight templates that support the repo's existing planning system
+
+### Milestone C: deeper specialization
+
+- add repo-local reviewer role files under `.codex/agents/`
+- add a lightweight review or audit surface that fits the host repo
+- add further automation only where repeated use clearly justifies it
+
+## Direct port vs adapt vs skip
+
+Use this quick decision rule when integrating the starter pack into an existing
+repo:
+
+### Port directly
+
+- `.codex/config.toml`
+- `.codex/hooks.json`
+- `.codex/hooks/*`
+- `.codex/rules/*`
+- repo-local skills under `.agents/skills/`
+- repo-local reviewer role files under `.codex/agents/` when stable roles exist
+
+### Adapt to the host repo
+
+- plan locations
+- session-log locations
+- review-report or audit locations
+- templates
+- workflow docs
+- review mappings and adversarial-review triggers
+
+### Skip unless the host repo truly needs them
+
+- slide or Quarto parity machinery
+- lecture-authoring workflows
+- LaTeX / TikZ tooling
+- presentation-review workflows
 
 ## Root `AGENTS.md` overlay
 
@@ -218,6 +283,9 @@ Document the repo's actual durable planning surfaces:
 If the repo already has ADRs, issue templates, runbooks, or milestone docs, use
 them rather than creating duplicate planning systems.
 
+If the repo already has strong durable planning habits, the right integration is
+usually "preserve and reinforce," not "replace and migrate."
+
 ## `KNOWLEDGE_BASE.md` starter
 
 Use this for stable repo truth:
@@ -273,12 +341,16 @@ Good early entries:
 Use this when adopting the overlay in a repo:
 
 - Keep the repo's existing agents and planning docs.
+- Decide which host-native directories will hold plans, session logs, and review artifacts.
 - Add or update a root `AGENTS.md` with overlay orchestration rules.
 - Document where plans, logs, and reports already live.
 - Map existing agents to workflow roles and define the default multi-agent
   review combinations.
 - Define which change classes count as high-stakes enough for adversarial
   review.
+- Decide which starter-pack features will port directly, which will be adapted,
+  and which will be skipped.
+- Prefer phased adoption: Milestone A first, then B, then C.
 - Add `KNOWLEDGE_BASE.md` and `MEMORY.md` if missing.
 - Make verification and completion standards explicit.
 - Do one pilot task and refine the overlay from what you learn.

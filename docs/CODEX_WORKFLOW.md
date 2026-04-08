@@ -23,6 +23,13 @@ This port keeps those outcomes, but uses Codex primitives:
 - `.agents/skills/*`
 - on-disk plans, logs, reports, knowledge base, and memory
 
+For existing repos, the preferred integration model is usually:
+
+- preserve the repo's planning and domain-doc authority
+- port the operational control plane and reusable workflow machinery
+- adapt durable-state locations and review surfaces to the host repo
+- skip slide- or lecture-specific features unless the host repo actually needs them
+
 ## 2. Recommended runtime
 
 Use **Codex app** or **Codex CLI** as the main execution surface for repo work.
@@ -39,6 +46,36 @@ Use Codex app / CLI for:
 - running verification commands
 - spawning parallel subagents
 - working in worktrees
+
+## 2.1 Existing-repo adoption model
+
+When integrating this starter pack into an existing serious repo, do not default
+to copying every file or directory literally.
+
+Default sequence:
+
+### Milestone A
+
+- repo-local `.codex/` config, hooks, and rules
+- repo-local skills for repeated workflows
+- explicit review mappings
+- scoped adversarial review for high-stakes changes
+
+### Milestone B
+
+- nested `AGENTS.md` files for high-risk paths
+- a repo-specific workflow guide
+- lightweight templates that support the host repo's existing planning system
+
+### Milestone C
+
+- repo-local reviewer role files under `.codex/agents/`
+- a lightweight review or audit surface that fits the host repo
+- further automation only where repeated use justifies it
+
+The key idea is that existing repos should usually absorb **most** of the
+starter pack, but not by replacing their own good planning, domain-doc, or
+durable-state systems.
 
 ## 3. Start-of-task checklist
 
@@ -258,6 +295,38 @@ Default expectations:
 This is not a perfect runtime equivalent to Claude's compression lifecycle, but
 it is the default persistence model for this repo and should be treated as part
 of the workflow, not optional documentation.
+
+## 12. Direct port vs adapt vs skip
+
+When applying this starter pack to another repo, use this decision rule:
+
+### Port directly
+
+- `.codex/config.toml`
+- `.codex/hooks.json`
+- `.codex/hooks/*`
+- `.codex/rules/*`
+- `.agents/skills/*` when the workflows are relevant
+- `.codex/agents/*` when stable repeated reviewer roles exist
+
+### Adapt to the host repo
+
+- plan and session-log locations
+- review or audit artifact locations
+- templates
+- workflow docs
+- review mappings
+- adversarial-review triggers
+
+### Skip unless relevant
+
+- `Slides/` / `Quarto/` parity machinery
+- lecture-authoring skills
+- LaTeX / TikZ tooling
+- presentation-review workflows
+
+The starter pack should be understood as an overlay kit for high-integration
+adoption, not only as a standalone repo skeleton.
 
 ## 12. What differs from Claude
 

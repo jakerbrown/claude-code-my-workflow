@@ -14,6 +14,15 @@ For each repo:
 6. Define which high-stakes changes should escalate to adversarial review.
 7. Drop the copy-ready `AGENTS.md` overlay into the repo and fill in the six fields.
 
+If the repo proves it needs more structure, expand in this order:
+
+1. add repo-local `.codex/`
+2. add repo-local skills
+3. add explicit review mappings and high-stakes review governance
+4. add nested `AGENTS.md`
+5. add workflow docs and templates
+6. add reviewer role files and a review/audit surface
+
 ## Fast fill-in worksheet
 
 ```text
@@ -46,8 +55,13 @@ Use [workflow-integration-overlay.md](/Users/jacobbrown/Documents/GitHub/codex-m
 - the repo needs a scoped adversarial-review rule for high-stakes changes
 - the repo lacks `KNOWLEDGE_BASE.md` and `MEMORY.md`
 - the repo needs more detailed orchestration guidance
+- the repo is likely to absorb most of this starter pack over time
 
 ## Best practice
 
 Start with the minimal kit in every repo, then only graduate a repo to the
 broader overlay or starter pack if that repo proves it needs more structure.
+
+For mature existing repos, "needs more structure" often means "wants almost all
+of the workflow, but adapted to the repo's own planning and documentation
+habits."
