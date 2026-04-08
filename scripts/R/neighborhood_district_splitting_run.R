@@ -44,6 +44,7 @@ processed_dir <- file.path(output_dir, "processed")
 figure_dir <- file.path(output_dir, "figures")
 table_dir <- file.path(output_dir, "tables")
 paper_dir <- file.path(output_dir, "paper")
+containment_tolerance <- 0.001
 
 walk(
   c(output_dir, raw_dir, raw_nbhd_dir, raw_council_dir, processed_dir, figure_dir, table_dir, paper_dir),
@@ -208,16 +209,32 @@ summarize_intersections <- function(neighborhoods, districts, system_name, distr
     st_transform(crs_out) |>
     transmute(district_id = as.character(.data[[district_id_field]]), geometry = geometry)
 
+  neighborhood_base <- nbhd_proj |>
+    st_drop_geometry() |>
+    select(city_key, state_abbr, nbhd_id, nbhd_name, neighborhood_area)
+
   district_join <- st_intersection(
     nbhd_proj |> select(city_key, state_abbr, nbhd_id, nbhd_name, neighborhood_area),
     districts_proj
   )
 
   if (nrow(district_join) == 0) {
-    return(tibble())
+    return(
+      neighborhood_base |>
+        mutate(
+          district_count = 0L,
+          largest_area = 0,
+          total_intersection_area = 0,
+          largest_area_share = 0,
+          uncovered_area_share = 1,
+          containment = FALSE,
+          system_name = system_name,
+          district_type = district_type
+        )
+    )
   }
 
-  district_join |>
+  district_summary <- district_join |>
     mutate(intersection_area = as.numeric(st_area(geometry))) |>
     st_drop_geometry() |>
     filter(intersection_area > 1) |>
@@ -227,11 +244,20 @@ summarize_intersections <- function(neighborhoods, districts, system_name, distr
       largest_area = max(intersection_area, na.rm = TRUE),
       total_intersection_area = sum(intersection_area, na.rm = TRUE),
       .groups = "drop"
+    )
+
+  neighborhood_base |>
+    left_join(
+      district_summary,
+      by = c("city_key", "state_abbr", "nbhd_id", "nbhd_name", "neighborhood_area")
     ) |>
     mutate(
-      containment = district_count == 1,
+      district_count = coalesce(as.integer(district_count), 0L),
+      largest_area = coalesce(largest_area, 0),
+      total_intersection_area = coalesce(total_intersection_area, 0),
       largest_area_share = pmin(1, largest_area / neighborhood_area),
       uncovered_area_share = pmax(0, 1 - (total_intersection_area / neighborhood_area)),
+      containment = district_count == 1L & uncovered_area_share <= containment_tolerance,
       system_name = system_name,
       district_type = district_type
     )
@@ -261,9 +287,9 @@ compute_weighted_summaries <- function(metrics) {
   city_weighted <- metrics |>
     group_by(sample_scope, system_name, district_type, city_key) |>
     summarize(
-      containment_rate = mean(containment, na.rm = TRUE),
-      mean_district_count = mean(district_count, na.rm = TRUE),
-      mean_largest_area_share = mean(largest_area_share, na.rm = TRUE),
+      city_containment_rate = mean(containment, na.rm = TRUE),
+      city_mean_district_count = mean(district_count, na.rm = TRUE),
+      city_mean_largest_area_share = mean(largest_area_share, na.rm = TRUE),
       n_neighborhoods_city = n(),
       .groups = "drop"
     ) |>
@@ -272,13 +298,13 @@ compute_weighted_summaries <- function(metrics) {
       weighting = "City-weighted",
       n_cities = n(),
       n_neighborhoods = sum(n_neighborhoods_city),
-      containment_rate = mean(containment_rate, na.rm = TRUE),
-      mean_district_count = mean(mean_district_count, na.rm = TRUE),
-      median_district_count = median(mean_district_count, na.rm = TRUE),
-      mean_largest_area_share = mean(mean_largest_area_share, na.rm = TRUE),
-      median_largest_area_share = median(mean_largest_area_share, na.rm = TRUE),
-      p10_largest_area_share = quantile(mean_largest_area_share, 0.10, na.rm = TRUE),
-      p90_largest_area_share = quantile(mean_largest_area_share, 0.90, na.rm = TRUE),
+      containment_rate = mean(city_containment_rate, na.rm = TRUE),
+      mean_district_count = mean(city_mean_district_count, na.rm = TRUE),
+      median_district_count = median(city_mean_district_count, na.rm = TRUE),
+      mean_largest_area_share = mean(city_mean_largest_area_share, na.rm = TRUE),
+      median_largest_area_share = median(city_mean_largest_area_share, na.rm = TRUE),
+      p10_largest_area_share = quantile(city_mean_largest_area_share, 0.10, na.rm = TRUE),
+      p90_largest_area_share = quantile(city_mean_largest_area_share, 0.90, na.rm = TRUE),
       .groups = "drop"
     )
 
@@ -300,15 +326,34 @@ write_markdown_table <- function(df, path, digits = 3) {
 message("Fetching Dataverse metadata...")
 dataverse_metadata <- fetch_dataverse_metadata()
 file_index <- extract_dataverse_files(dataverse_metadata)
-neighborhood_file_index <- choose_neighborhood_files(file_index)
 
-write_csv(neighborhood_file_index, file.path(processed_dir, "neighborhood_file_index.csv"))
+pinned_neighborhood_index_path <- file.path(processed_dir, "neighborhood_file_index.csv")
+if (file.exists(pinned_neighborhood_index_path)) {
+  neighborhood_file_index <- read_csv(pinned_neighborhood_index_path, show_col_types = FALSE)
+} else {
+  neighborhood_file_index <- choose_neighborhood_files(file_index)
+}
+
+write_csv(neighborhood_file_index, pinned_neighborhood_index_path)
 write_csv(city_council_sources, file.path(processed_dir, "city_council_source_index.csv"))
 
 # 2. Download and read neighborhood boundaries ----
 message("Downloading neighborhood boundary files...")
 neighborhood_zips <- neighborhood_file_index |>
   mutate(zip_path = pmap_chr(list(file_id, city_key, label), load_or_download_neighborhood_zip))
+
+neighborhood_download_manifest <- neighborhood_zips |>
+  transmute(
+    city_key,
+    label,
+    file_id,
+    source_url = sprintf("https://dataverse.harvard.edu/api/access/datafile/%s", file_id),
+    local_path = zip_path,
+    downloaded_at = format(file.info(zip_path)$mtime, tz = "UTC", usetz = TRUE),
+    md5 = unname(tools::md5sum(zip_path))
+  )
+
+write_csv(neighborhood_download_manifest, file.path(processed_dir, "neighborhood_download_manifest.csv"))
 
 message("Reading neighborhood boundaries...")
 neighborhoods_all <- pmap_dfr(
@@ -387,6 +432,15 @@ for (i in seq_len(nrow(city_council_sources))) {
 city_council_metrics <- bind_rows(council_metrics_list)
 saveRDS(city_council_metrics, file.path(processed_dir, "city_council_metrics.rds"))
 write_csv(city_council_metrics, file.path(table_dir, "city_council_metrics.csv"))
+
+city_council_download_manifest <- city_council_sources |>
+  mutate(
+    local_path = file.path(raw_council_dir, paste0(city_key, ".geojson")),
+    downloaded_at = format(file.info(local_path)$mtime, tz = "UTC", usetz = TRUE),
+    md5 = unname(tools::md5sum(local_path))
+  )
+
+write_csv(city_council_download_manifest, file.path(processed_dir, "city_council_download_manifest.csv"))
 
 # 5. Optional population-weighted branch ----
 message("Computing matched-sample population weights where feasible...")
@@ -523,13 +577,14 @@ if (
     mutate(sample_scope = "Matched city sample") |>
     group_by(sample_scope, system_name, district_type) |>
     summarize(
-      weighting = "Population-weighted neighborhood population",
+      weighting = "Population-weighted",
       n_cities = n_distinct(city_key),
       n_neighborhoods = n(),
+      total_population = sum(neighborhood_population, na.rm = TRUE),
       containment_rate = NA_real_,
-      mean_district_count = mean(district_count_pop, na.rm = TRUE),
+      mean_district_count = weighted.mean(district_count_pop, neighborhood_population, na.rm = TRUE),
       median_district_count = median(district_count_pop, na.rm = TRUE),
-      mean_largest_area_share = mean(largest_pop_share, na.rm = TRUE),
+      mean_largest_area_share = weighted.mean(largest_pop_share, neighborhood_population, na.rm = TRUE),
       median_largest_area_share = median(largest_pop_share, na.rm = TRUE),
       p10_largest_area_share = quantile(largest_pop_share, 0.10, na.rm = TRUE),
       p90_largest_area_share = quantile(largest_pop_share, 0.90, na.rm = TRUE),
@@ -557,23 +612,49 @@ saveRDS(summary_table, file.path(processed_dir, "summary_table.rds"))
 coverage_table <- tibble(
   analysis_component = c(
     "Neighborhood source cities",
-    "State legislative analysis cities",
+    "State lower-chamber analysis",
+    "State upper-chamber analysis",
     "City council sample cities"
   ),
   city_count = c(
     n_distinct(neighborhood_file_index$city_key),
-    n_distinct(state_metrics$city_key),
+    n_distinct(filter(state_metrics, district_type == "state_lower")$city_key),
+    n_distinct(filter(state_metrics, district_type == "state_upper")$city_key),
     n_distinct(city_council_metrics$city_key)
+  ),
+  neighborhood_count = c(
+    nrow(neighborhoods_all),
+    nrow(filter(state_metrics, district_type == "state_lower")),
+    nrow(filter(state_metrics, district_type == "state_upper")),
+    nrow(city_council_metrics)
   ),
   notes = c(
     "Cities with one cleaned neighborhood boundary file selected from the Dataverse release.",
-    "Cities successfully matched to 2024 state legislative district boundaries through tigris/Census.",
+    "Lower-chamber overlays against 2024 state legislative districts; includes zero-overlap neighborhoods and uncovered-area diagnostics.",
+    "Upper-chamber overlays against 2024 state legislative districts; includes zero-overlap neighborhoods and uncovered-area diagnostics.",
     "Cities with official municipal city council boundary downloads configured in this script."
   )
 )
 
 write_csv(coverage_table, file.path(table_dir, "coverage_table.csv"))
 write_markdown_table(coverage_table, file.path(table_dir, "coverage_table.md"))
+
+city_system_summary <- bind_rows(matched_state_metrics, city_council_metrics) |>
+  st_drop_geometry() |>
+  group_by(city_key, system_name, district_type) |>
+  summarize(
+    n_neighborhoods = n(),
+    containment_rate = mean(containment, na.rm = TRUE),
+    mean_district_count = mean(district_count, na.rm = TRUE),
+    median_district_count = median(district_count, na.rm = TRUE),
+    mean_largest_area_share = mean(largest_area_share, na.rm = TRUE),
+    median_largest_area_share = median(largest_area_share, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(system_name, city_key)
+
+write_csv(city_system_summary, file.path(table_dir, "matched_city_system_summary.csv"))
+write_markdown_table(city_system_summary, file.path(table_dir, "matched_city_system_summary.md"))
 
 # 7. Figures ----
 plot_summary <- summary_table |>
@@ -671,15 +752,47 @@ if (nrow(map_candidates) > 0) {
       pull(url)
   )
 
+  example_district_id_field <- pick_district_id_field(example_districts)
+  example_districts <- example_districts |>
+    mutate(district_id = as.character(.data[[example_district_id_field]]))
+
+  highlighted_neighborhood <- example_neighborhoods |>
+    filter(nbhd_id == !!example_nbhd_id)
+
+  map_crs <- utm_epsg_for_geometry(highlighted_neighborhood)
+  highlighted_proj <- st_transform(highlighted_neighborhood, map_crs)
+  example_neighborhoods_proj <- st_transform(example_neighborhoods, map_crs)
+  example_districts_proj <- st_transform(example_districts, map_crs)
+  map_window_proj <- st_buffer(highlighted_proj, 3000)
+
+  nearby_neighborhoods <- st_filter(example_neighborhoods_proj, map_window_proj, .predicate = st_intersects) |>
+    st_transform(4326)
+  nearby_districts <- st_filter(example_districts_proj, map_window_proj, .predicate = st_intersects) |>
+    st_transform(4326)
+  intersecting_districts <- st_filter(example_districts_proj, highlighted_proj, .predicate = st_intersects)
+  district_labels <- st_point_on_surface(intersecting_districts) |>
+    st_transform(4326)
+  intersecting_districts <- st_transform(intersecting_districts, 4326)
+  highlighted_neighborhood <- st_transform(highlighted_proj, 4326)
+  map_window <- st_bbox(st_transform(map_window_proj, 4326))
+
   example_plot <- ggplot() +
-    geom_sf(data = example_districts, fill = NA, color = "#1f78b4", linewidth = 0.6) +
-    geom_sf(data = example_neighborhoods, fill = "grey85", color = "white", linewidth = 0.15) +
-    geom_sf(data = example_neighborhoods |> filter(nbhd_id == !!example_nbhd_id), fill = "#e31a1c", color = "black", linewidth = 0.5) +
+    geom_sf(data = nearby_neighborhoods, fill = "grey92", color = "white", linewidth = 0.25) +
+    geom_sf(data = nearby_districts, fill = NA, color = "#6baed6", linewidth = 0.45) +
+    geom_sf(data = intersecting_districts, aes(fill = district_id), alpha = 0.35, color = "#08519c", linewidth = 0.6) +
+    geom_sf(data = highlighted_neighborhood, fill = NA, color = "#e31a1c", linewidth = 1.1) +
+    geom_sf_text(data = district_labels, aes(label = district_id), color = "#08306b", size = 3) +
+    coord_sf(
+      xlim = c(map_window$xmin, map_window$xmax),
+      ylim = c(map_window$ymin, map_window$ymax),
+      expand = FALSE
+    ) +
     labs(
       title = sprintf("Example of neighborhood splitting: %s", example_city),
-      subtitle = "Highlighted neighborhood shown against city council district boundaries"
+      subtitle = "Highlighted neighborhood and intersecting city council districts"
     ) +
-    theme_void(base_size = 12)
+    theme_void(base_size = 12) +
+    theme(legend.position = "none")
 
   ggsave(
     filename = file.path(figure_dir, "example_city_council_split_map.png"),
@@ -696,9 +809,11 @@ analysis_notes <- c(
   "# Analysis notes",
   "",
   sprintf("- Neighborhood source cities loaded: %s", n_distinct(neighborhood_file_index$city_key)),
-  sprintf("- State legislative metric rows: %s", nrow(state_metrics)),
+  sprintf("- State lower-chamber metric rows: %s", nrow(filter(state_metrics, district_type == 'state_lower'))),
+  sprintf("- State upper-chamber metric rows: %s", nrow(filter(state_metrics, district_type == 'state_upper'))),
   sprintf("- City council metric rows: %s", nrow(city_council_metrics)),
-  sprintf("- Matched city-council sample: %s", paste(city_council_sources$city_label, collapse = ", "))
+  sprintf("- Matched city-council sample: %s", paste(city_council_sources$city_label, collapse = ", ")),
+  sprintf("- Containment tolerance on uncovered area share: %s", containment_tolerance)
 )
 
 writeLines(analysis_notes, file.path(paper_dir, "analysis_notes.md"))

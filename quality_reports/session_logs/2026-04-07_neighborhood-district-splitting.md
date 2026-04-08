@@ -48,6 +48,43 @@ completion.
   - The design memo and paper will foreground neighborhood-weighted and
     city-weighted results, with population weighting only if it proves robust.
 
+### 00:41 — First full pipeline verification
+- Summary:
+  - Ran `Rscript scripts/R/neighborhood_district_splitting_run.R` end to end
+    and produced tables, figures, raw-download caches, and processed outputs
+    under `output/neighborhood_district_splitting/`.
+- Files in play:
+  - `scripts/R/neighborhood_district_splitting_run.R`
+  - `output/neighborhood_district_splitting/`
+- Next step:
+  - Draft manuscript, render it, and begin specialist review.
+
+### 00:58 — Specialist review surfaced measurement issues
+- Decision:
+  - Treat the code-review findings as substantive and revise the estimand
+    implementation before treating any broad containment numbers as final.
+- Why:
+  - The first implementation dropped zero-overlap neighborhoods, overstated
+    containment for partially uncovered cases, and compressed chamber-specific
+    coverage differences.
+- Impact:
+  - Reworked the overlap summarization, coverage table, city-weighted summary
+    logic, and manuscript interpretation before final rendering.
+
+### 01:19 — Re-verified after fixes
+- Summary:
+  - Re-ran the full pipeline after fixing containment logic, coverage
+    denominators, city-weighted summary construction, and source manifests.
+  - Re-rendered the paper to HTML and PDF.
+  - Ran a focused second-pass review on both the R pipeline and manuscript.
+- Files in play:
+  - `scripts/R/neighborhood_district_splitting_run.R`
+  - `output/neighborhood_district_splitting/paper/neighborhood_district_splitting_draft.qmd`
+  - `quality_reports/review_r_neighborhood_district_splitting.md`
+  - `quality_reports/review_paper_neighborhood_district_splitting.md`
+- Next step:
+  - Write the final analysis report and close out the session.
+
 ## Open questions / blockers
 
 - Item:
@@ -59,5 +96,17 @@ completion.
 ## End-of-session summary
 
 - What changed:
+  - Added a full reproducible neighborhood/district splitting pipeline, summary
+    tables, figures, manifests, and a short paper draft with rendered HTML/PDF.
+  - Added durable design, literature, analysis, and review reports.
 - What was verified:
+  - Main R pipeline executed successfully after the final fixes.
+  - Paper rendered successfully to both HTML and PDF after the final fixes.
+  - Parallel specialist re-review found no remaining material manuscript
+    issues and only a bounded reproducibility caveat for future fresh-source
+    reruns.
 - Remaining work:
+  - National city-council coverage remains out of scope.
+  - Source reproducibility is improved via manifests and pinned file-index
+    reuse, but a truly archival version would snapshot municipal files or pin
+    upstream release versions more aggressively.

@@ -1,0 +1,72 @@
+# Repo-local execution policy rules for the Codex port starter pack.
+#
+# Keep pushes and merges interactive.
+# Block obviously destructive recursive deletes and hard resets.
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Push only after verification and report generation.",
+    match = [
+        "git push",
+        "git push origin codex-port"
+    ],
+    not_match = [
+        "git status",
+        "git pull"
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "prompt",
+    justification = "Commit only after the quality threshold is met and the summary is ready.",
+    match = [
+        "git commit -m update",
+        "git commit --amend"
+    ],
+    not_match = [
+        "git status",
+        "git add AGENTS.md"
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", ["create", "merge"]],
+    decision = "prompt",
+    justification = "PR creation and merge stay interactive in this workflow.",
+    match = [
+        "gh pr create --fill",
+        "gh pr merge 12 --squash"
+    ],
+    not_match = [
+        "gh pr view 12",
+        "gh pr list"
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "Hard resets are blocked. Use targeted restores or create a new worktree.",
+    match = [
+        "git reset --hard",
+        "git reset --hard HEAD~1"
+    ],
+    not_match = [
+        "git reset HEAD file.txt"
+    ],
+)
+
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "forbidden",
+    justification = "Recursive force deletes are blocked. Remove files deliberately or use Git-aware cleanup.",
+    match = [
+        "rm -rf build",
+        "rm -rf /tmp/example"
+    ],
+    not_match = [
+        "rm README.md"
+    ],
+)
