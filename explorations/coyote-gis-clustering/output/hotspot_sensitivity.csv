@@ -1,0 +1,9 @@
+scenario,cell_size_m,n_cells,hotspot_cells
+raw_reports,150,611,27
+raw_reports,250,234,13
+raw_reports,400,100,10
+raw_reports,600,51,6
+unique_locations,150,611,26
+unique_locations,250,234,12
+unique_locations,400,100,10
+unique_locations,600,51,3
