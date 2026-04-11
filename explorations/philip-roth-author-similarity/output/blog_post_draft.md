@@ -90,7 +90,7 @@ The first figure to keep in mind is the overall leaderboard, which turns that
 composite into something easy to scan while also marking which authors you have
 already read on Goodreads.
 
-![Overall Roth similarity leaderboard](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_overall_leaderboard_goodreads.png)
+![Overall Roth similarity leaderboard](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_overall_leaderboard_goodreads.png)
 
 The green bars are authors already in your Goodreads history; the orange bars
 are high-ranking authors not found in the export. That is what makes the
@@ -130,7 +130,7 @@ You can also see the shape of the top matches in profile form rather than as a
 single rank. The radar chart below makes clear that Díaz, Gaitskill, Hemon,
 Hadley, and DeLillo are not “close” in the same way.
 
-![Top author dimensional profiles](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_top_author_profiles.png)
+![Top author dimensional profiles](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_top_author_profiles.png)
 
 ## The dimension-by-dimension picture
 
@@ -163,7 +163,7 @@ That gives us a useful distinction:
 The heatmap is probably the single most informative visual in the package,
 because it shows the multi-dimensional argument in one place.
 
-![Heatmap of Roth similarity by dimension](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_heatmap_by_dimension.png)
+![Heatmap of Roth similarity by dimension](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_heatmap_by_dimension.png)
 
 This is the chart that prevents the piece from collapsing into one lazy score.
 DeLillo glows on topic and confessional markers but not emotional-moral
@@ -231,7 +231,7 @@ matches, and the two most obvious unread next authors are Hemon and Hadley.
 
 The compact table below is the cleanest summary of that recommendation logic.
 
-![Read versus unread recommendation table](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_read_unread_recommendation_table.png)
+![Read versus unread recommendation table](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_read_unread_recommendation_table.png)
 
 ## Read-next shortlist
 
@@ -282,14 +282,14 @@ of the corpus and the checks I actually ran, a more trustworthy one.
 # Figure captions
 
 - **Overall similarity leaderboard**:
-  [figure_overall_leaderboard_goodreads.png](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_overall_leaderboard_goodreads.png)
+  [figure_overall_leaderboard_goodreads.png](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_overall_leaderboard_goodreads.png)
   Composite Roth-similarity scores, colored by verified Goodreads status.
 - **Dimension heatmap**:
-  [figure_heatmap_by_dimension.png](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_heatmap_by_dimension.png)
+  [figure_heatmap_by_dimension.png](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_heatmap_by_dimension.png)
   Each author's standardized closeness to Roth across the five similarity families.
 - **Top-author profiles**:
-  [figure_top_author_profiles.png](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_top_author_profiles.png)
+  [figure_top_author_profiles.png](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_top_author_profiles.png)
   Radar chart showing how the top five authors resemble Roth in different ways.
 - **Read / unread recommendation table**:
-  [figure_read_unread_recommendation_table.png](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_read_unread_recommendation_table.png)
+  [figure_read_unread_recommendation_table.png](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/figure_read_unread_recommendation_table.png)
   Compact table linking overall rank, strongest dimension, and Goodreads status.

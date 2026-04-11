@@ -5,7 +5,7 @@ run the full research project.
 
 ---
 
-You are working inside `/Users/jacobbrown/Documents/GitHub/codex-my-workflow`.
+You are working inside `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow`.
 This is an exploratory but high-standards research task. Your objective is to
 conduct a serious, reproducible empirical project and draft a blog post that
 answers the question:

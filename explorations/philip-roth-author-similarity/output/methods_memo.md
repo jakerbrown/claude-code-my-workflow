@@ -197,8 +197,8 @@ Partially implemented / discussed rather than fully solved:
 ## Reproducibility
 
 - Main script:
-  `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/src/run_pipeline.py`
+  `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/src/run_pipeline.py`
 - Main outputs:
-  `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/corpus_manifest.csv`
-  `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/book_level_features.csv`
-  `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/output/author_level_scores.csv`
+  `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/corpus_manifest.csv`
+  `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/book_level_features.csv`
+  `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/output/author_level_scores.csv`

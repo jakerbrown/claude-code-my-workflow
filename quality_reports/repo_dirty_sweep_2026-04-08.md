@@ -23,7 +23,7 @@ Accessible GitHub repos were matched to local clones by `origin` remote URL unde
 
 ### Ambiguous local clones
 
-- `/Users/jacobbrown/Documents/GitHub/codex-my-workflow` is dirty, but `origin` points to `jakerbrown/claude-code-my-workflow`, not the accessible repo `jakerbrown/codex-my-workflow`.
+- `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow` is dirty, but `origin` points to `jakerbrown/claude-code-my-workflow`, not the accessible repo `jakerbrown/codex-my-workflow`.
 - `/Users/jacobbrown/Documents/GitHub/maup` matches the project name of accessible repo `jakerbrown/maup`, but `origin` points to `christopherkenny/maup`.
 - `/Users/jacobbrown/Documents/GitHub/movers-childhood` matches the project name of accessible repo `jakerbrown/movers-childhood`, but `origin` points to `sahilchinoy/movers-childhood`.
 

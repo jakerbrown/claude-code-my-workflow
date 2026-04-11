@@ -47,7 +47,7 @@ I also compared the rule with obvious benchmarks:
 The best naive pooled rule was "bet every early underdog for the first 3
 weeks." It still did not make compelling money.
 
-![ROI by window](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/spencer-underdog-betting/output/fig_roi_by_window.png)
+![ROI by window](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/spencer-underdog-betting/output/fig_roi_by_window.png)
 
 Pooled results:
 
@@ -80,7 +80,7 @@ by vig and variance, though it is not diagnostic of that mechanism on its own.
 
 The story is not the same in every league.
 
-![Forest plot](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/spencer-underdog-betting/output/fig_forest_plot.png)
+![Forest plot](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/spencer-underdog-betting/output/fig_forest_plot.png)
 
 Early 3-week underdog ROI by league:
 
@@ -116,7 +116,7 @@ For pooled early 3-week underdogs:
 - average no-vig implied win probability: `39.70%`
 - calibration gap: `+0.75` percentage points
 
-![Calibration plot](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/spencer-underdog-betting/output/fig_calibration.png)
+![Calibration plot](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/spencer-underdog-betting/output/fig_calibration.png)
 
 That is a real but small gap. It says early underdogs won slightly more often
 than the de-vigged closing prices implied, but not by enough to create a large,

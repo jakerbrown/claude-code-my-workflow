@@ -1,0 +1,7 @@
+data/cache/
+output/*.csv
+output/figure_*.png
+output/figure_notes.md
+output/goodreads_library_export.csv
+output/jakerbrown_blog_breadcrumb.md
+.DS_Store

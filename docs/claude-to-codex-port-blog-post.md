@@ -23,7 +23,9 @@ also expanding what I can do with the models. Specifically: how much of the
 Claude workflow from Sant'Anna's repo can be preserved when the assistant
 changes from Claude to Codex?
 
-Public repo: [codex-my-workflow](https://github.com/jakerbrown/codex-my-workflow)
+Working repo name here: `claude-codex-my-workflow`
+
+Public GitHub slug at the time of writing: [codex-my-workflow](https://github.com/jakerbrown/codex-my-workflow)
 
 As Codex explains it to me:
 

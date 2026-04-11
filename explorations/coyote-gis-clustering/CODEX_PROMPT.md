@@ -5,7 +5,7 @@ run the full project.
 
 ---
 
-You are working inside `/Users/jacobbrown/Documents/GitHub/codex-my-workflow`.
+You are working inside `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow`.
 This is an exploratory but high-standards empirical GIS project. Your objective
 is to conduct a serious, reproducible spatial analysis and draft a blog post on
 the following question:

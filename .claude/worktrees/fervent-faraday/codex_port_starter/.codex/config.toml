@@ -1,0 +1,50 @@
+# Project-scoped Codex configuration for the Codex port of
+# `claude-code-my-workflow`.
+#
+# Keep this file conservative by default. Loosen permissions only when the
+# workflow truly needs it.
+
+model = "gpt-5.4"
+review_model = "gpt-5.4"
+model_reasoning_effort = "high"
+personality = "pragmatic"
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "cached"
+allow_login_shell = false
+
+# Keep instruction discovery explicit and stable.
+project_doc_max_bytes = 32768
+project_doc_fallback_filenames = ["CLAUDE.md"]
+
+[features]
+codex_hooks = true
+multi_agent = true
+shell_snapshot = true
+
+[agents]
+max_threads = 6
+max_depth = 1
+job_max_runtime_seconds = 1800
+
+[sandbox_workspace_write]
+network_access = false
+exclude_tmpdir_env_var = false
+exclude_slash_tmp = false
+
+[shell_environment_policy]
+inherit = "core"
+exclude = ["AWS_*", "AZURE_*", "*TOKEN*", "*SECRET*", "*KEY*"]
+include_only = [
+  "PATH",
+  "HOME",
+  "SHELL",
+  "USER",
+  "LANG",
+  "LC_ALL",
+  "TMPDIR",
+  "R_HOME",
+  "RSTUDIO_PANDOC",
+  "QUARTO_PYTHON",
+]

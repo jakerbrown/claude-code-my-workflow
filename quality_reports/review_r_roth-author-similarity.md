@@ -7,7 +7,7 @@
 
 This project's implemented analysis pipeline lives in:
 
-- `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/philip-roth-author-similarity/src/run_pipeline.py`
+- `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/philip-roth-author-similarity/src/run_pipeline.py`
 
 No substantial R analysis code was created for this task, so the repo's
 `r-reviewer` role did not have live code within its intended scope.

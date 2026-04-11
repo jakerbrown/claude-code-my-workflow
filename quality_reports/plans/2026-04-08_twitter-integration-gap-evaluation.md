@@ -43,9 +43,9 @@ twitter-repo files.
 - `/Users/jacobbrown/Documents/GitHub/twitter/MEMORY.md`
 - `/Users/jacobbrown/Documents/GitHub/twitter/README.md`
 - `/Users/jacobbrown/Documents/GitHub/twitter/plans/README.md`
-- `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/AGENTS.md`
-- `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/docs/CODEX_WORKFLOW.md`
-- `/Users/jacobbrown/Documents/GitHub/codex-my-workflow/templates/workflow-integration-overlay.md`
+- `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/AGENTS.md`
+- `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/docs/CODEX_WORKFLOW.md`
+- `/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/templates/workflow-integration-overlay.md`
 
 ## Implementation approach
 

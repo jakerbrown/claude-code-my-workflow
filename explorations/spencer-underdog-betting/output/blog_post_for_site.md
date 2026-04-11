@@ -42,7 +42,7 @@ not, by itself, diagnostic of that mechanism, and it is not large enough to
 become a dependable positive betting edge once bookmaker hold and sampling
 uncertainty are accounted for.
 
-![ROI by window](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/spencer-underdog-betting/output/fig_roi_by_window.png)
+![ROI by window](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/spencer-underdog-betting/output/fig_roi_by_window.png)
 
 ## League differences matter
 
@@ -57,7 +57,7 @@ The partial-pooling model shrinks those raw league estimates back toward a
 slightly negative pooled mean, which is exactly what you would expect if the
 league splits contain signal but also a lot of noise.
 
-![Forest plot](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/spencer-underdog-betting/output/fig_forest_plot.png)
+![Forest plot](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/spencer-underdog-betting/output/fig_forest_plot.png)
 
 The cleanest interpretation is:
 
@@ -80,7 +80,7 @@ For pooled early 3-week underdogs:
 
 That is a favorable sign, but it is small.
 
-![Calibration plot](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/explorations/spencer-underdog-betting/output/fig_calibration.png)
+![Calibration plot](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/explorations/spencer-underdog-betting/output/fig_calibration.png)
 
 League-level calibration gaps tell the same story:
 

@@ -1,6 +1,6 @@
 # Minimal Workflow Overlay Usage
 
-Use [minimal-workflow-overlay-kit.md](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/templates/minimal-workflow-overlay-kit.md) when rolling this workflow out across many repos.
+Use [minimal-workflow-overlay-kit.md](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/templates/minimal-workflow-overlay-kit.md) when rolling this workflow out across many repos.
 
 ## Recommended rollout order
 
@@ -47,7 +47,7 @@ HIGH_STAKES_RULE=release-critical behavior, security-sensitive changes, and corr
 
 ## When to use the broader overlay instead
 
-Use [workflow-integration-overlay.md](/Users/jacobbrown/Documents/GitHub/codex-my-workflow/templates/workflow-integration-overlay.md) instead when:
+Use [workflow-integration-overlay.md](/Users/jacobbrown/Documents/GitHub/claude-codex-my-workflow/templates/workflow-integration-overlay.md) instead when:
 
 - the repo has unusual planning/reporting structure
 - the repo needs a more explicit agent-role mapping table

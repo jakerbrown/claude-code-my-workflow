@@ -1,0 +1,16 @@
+metric,value
+raw_reports,290
+unique_exact_locations,251
+nonblank_reporting_addresses,244
+share_reports_on_repeated_exact_coordinates,0.22758620689655173
+share_reports_from_repeated_addresses,0.27049180327868855
+share_top1_exact_location,0.013793103448275862
+share_top5_exact_locations,0.06551724137931035
+share_top1_reporting_address,0.020491803278688523
+share_top5_reporting_addresses,0.0860655737704918
+repeated_reporting_addresses,25
+same_address_same_day_multi_reports,5
+same_address_same_week_multi_reports,6
+repeated_addresses_multi_coordinate,6
+same_location_same_day_multi_reports,5
+years_with_reports,23
